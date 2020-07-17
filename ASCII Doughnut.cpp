@@ -1,6 +1,4 @@
 #include <iostream>
-#include <process.h>
-
 #include <windows.h>
 
 void usleep(__int64 usec)
