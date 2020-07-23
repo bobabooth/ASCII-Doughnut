@@ -67,7 +67,8 @@ int main()
                 int y = 12 + 15 * D * (l * h * n + t * m);
                 int o = x + 80 * y;
                 int N = 8 * ((f * e - c * d * g) * m - c * d * e - f * g - l * d * n);
-                if (22 > y && y > 0 && x > 0 && 80 > x && D > z[o]) {
+                if (22 > y && y > 0 && x > 0 && 80 > x && D > z[o])
+                {
                     z[o] = D;
                     b[o] = ".,-~:;=!*#$@"[N > 0 ? N : 0];
                 }
