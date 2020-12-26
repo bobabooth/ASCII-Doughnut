@@ -1,6 +1,10 @@
 #include <iostream>
 #include <windows.h>
 
+//If you're getting Sin / Cos not defined error, then uncomment the following:
+//#include <stdio.h>
+//#include <math.h>
+
 void usleep(__int64 usec)
 {
     HANDLE timer;
