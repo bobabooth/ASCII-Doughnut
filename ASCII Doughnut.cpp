@@ -1,21 +1,16 @@
 #include <iostream>
 #include <windows.h>
 
-//If you're getting Sin / Cos not defined error, then uncomment the following:
-//#include <stdio.h>
-//#include <math.h>
+#include <stdio.h>
+#include <math.h>
 
-void usleep(__int64 usec)
+void gotoxy(SHORT x, SHORT y)
 {
-    HANDLE timer;
-    LARGE_INTEGER ft;
-
-    ft.QuadPart = -(10 * usec); // Convert to 100 nanosecond interval, negative value indicates relative time
-
-    timer = CreateWaitableTimer(NULL, TRUE, NULL);
-    SetWaitableTimer(timer, &ft, 0, NULL, NULL, 0);
-    WaitForSingleObject(timer, INFINITE);
-    CloseHandle(timer);
+  static HANDLE h = NULL;  
+  if(!h)
+    h = GetStdHandle(STD_OUTPUT_HANDLE);
+  COORD c = { x, y };  
+  SetConsoleCursorPosition(h,c);
 }
 
 //              k;double sin()
@@ -85,7 +80,8 @@ int main()
             A += 0.00004;
             B += 0.00002;
         }
-        usleep(30000);
+        //Sleep(10);
+        gotoxy(0,0);
     }
     return 0;
 }
