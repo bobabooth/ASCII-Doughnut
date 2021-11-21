@@ -1,9 +1,10 @@
 #include <iostream>
 #include <windows.h>
-
 #include <stdio.h>
 #include <math.h>
 
+// An implementation of gotoxy() function for smoother animation
+// without scrolling or clearing screen.
 void gotoxy(SHORT x, SHORT y)
 {
   static HANDLE h = NULL;  
@@ -37,9 +38,19 @@ void gotoxy(SHORT x, SHORT y)
 
 int main()
 {
+    // R1 is taken as 1, since it is only multiplied with terms,
+    // we can neglect it in this program.
+
+    // A, B
     float A = 0, B = 0;
+
+    //phi, theta
     float i, j;
+    
+    //K1
     int k;
+
+    //z-buffer
     float z[1760];
     char b[1760];
     std::cout << "\x1b[2J";
@@ -51,24 +62,38 @@ int main()
         {
             for (i = 0; i < 6.28; i += 0.02)
             {
-                float c = sin(i);
-                float d = cos(j);
-                float e = sin(A);
-                float f = sin(j);
-                float g = cos(A);
-                float h = d + 2;
-                float D = 1 / (c * h * e + f * g + 5);
-                float l = cos(i);
-                float m = cos(B);
-                float n = sin(B);
+                // We will calculate the position and luminance of each point.
+                float c = sin(i); // sin(phi)
+                float d = cos(j); // cos(theta)
+                float e = sin(A); // sin(A)
+                float f = sin(j); // sin(theta)
+                float g = cos(A); // cos(A)
+                float h = d + 2;  // (R2 + R1cos(theta)) //R2 is taken as 2 here
+                float D = 1 / (c * h * e + f * g + 5); // 1/(z + K2) //K2 is taken as 5
+                float l = cos(i); // cos(phi)
+                float m = cos(B); // cos(B)
+                float n = sin(B); // sin(B)
+              
                 float t = c * h * g - f * e;
+
+                // Calculating x (x' since we are multiplting by D) (K1 is 1)
                 int x = 40 + 30 * D * (l * h * m - t * n);
+
+                // Calculating y (y' specifically since we are multiplying by D)
                 int y = 12 + 15 * D * (l * h * n + t * m);
+                
+                // Varible to store rendered ASCII character in the buffer.
+                // We are using a 1D array.
                 int o = x + 80 * y;
+
+                // Luminance
                 int N = 8 * ((f * e - c * d * g) * m - c * d * e - f * g - l * d * n);
                 if (22 > y && y > 0 && x > 0 && 80 > x && D > z[o])
                 {
+                    // String D in z-buffer
                     z[o] = D;
+
+                    // Choosing ASCII character based on Luminance and storing it in buffer
                     b[o] = ".,-~:;=!*#$@"[N > 0 ? N : 0];
                 }
             }
@@ -83,5 +108,7 @@ int main()
         //Sleep(10);
         gotoxy(0,0);
     }
+
+
     return 0;
 }
